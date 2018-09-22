@@ -3,7 +3,7 @@ package com.auyamatech.domain;
 import javax.persistence.*;
 
 @Entity
-public class UnitOfMesure {
+public class UnitOfMeasure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
