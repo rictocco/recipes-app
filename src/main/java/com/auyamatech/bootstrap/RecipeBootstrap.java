@@ -4,15 +4,18 @@ import com.auyamatech.domain.*;
 import com.auyamatech.repositories.CategoryRepository;
 import com.auyamatech.repositories.RecipeRepository;
 import com.auyamatech.repositories.UnitOfMeasureReposirory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private RecipeRepository recipeRepository;
@@ -27,6 +30,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    //@Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(getRecipes());
     }
@@ -38,36 +42,42 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
 
         if(!eachUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository.findByDescription("Tablespoon");
 
         if(!tableSpoonUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
 
         if(!teaSpoonUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> dashUomOptional = unitOfMeasureRepository.findByDescription("Dash");
 
         if(!dashUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint");
 
         if(!pintUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
         Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup");
 
         if(!cupsUomOptional.isPresent()){
+            log.error("Expected UOM Not Found");
             throw new RuntimeException("Expected UOM Not Found");
         }
 
@@ -83,12 +93,14 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
 
         if(!americanCategoryOptional.isPresent()){
+            log.error("Expected Category Not Found");
             throw new RuntimeException("Expected Category Not Found");
         }
 
         Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
 
         if(!mexicanCategoryOptional.isPresent()){
+            log.error("Expected Category Not Found");
             throw new RuntimeException("Expected Category Not Found");
         }
 
@@ -138,6 +150,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         guacRecipe.getCategories().add(mexicanCategory);
 
         guacRecipe.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+
+        log.debug("Recipe best guacamole created");
 
         //add to return list
         recipes.add(guacRecipe);
@@ -200,6 +214,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacosRecipe.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
 
         recipes.add(tacosRecipe);
+
+        log.debug("Recipe Yummy tacos created");
         return recipes;
     }
 }
