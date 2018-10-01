@@ -1,7 +1,7 @@
 package com.auyamatech.controllers;
 
 import com.auyamatech.domain.Recipe;
-import com.auyamatech.services.RecipeServiceImpl;
+import com.auyamatech.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +11,9 @@ import java.util.Set;
 @Slf4j
 @Controller
 public class IndexController {
-    private RecipeServiceImpl recipeService;
+    private RecipeService recipeService;
 
-    public IndexController(RecipeServiceImpl recipeService) {
+    public IndexController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
