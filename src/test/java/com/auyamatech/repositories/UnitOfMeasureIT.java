@@ -8,26 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.swing.*;
-
 import java.util.Optional;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class RecipeRepositoryIT {
+public class UnitOfMeasureIT {
 
     @Autowired
-    UnitOfMeasureReposirory unitOfMeasureReposirory;
+    private UnitOfMeasureReposirory unitOfMeasureReposirory;
 
     @Before
     public void setUp() {
     }
 
     @Test
-    public void findByDescriptionTeaspoon() throws Exception{
+    @DirtiesContext //Use this to restore the Spring context if the test changes something in the database.
+    public void findByDescription() {
         Optional<UnitOfMeasure> uofOptional = unitOfMeasureReposirory.findByDescription("Teaspoon");
 
         assertEquals("Teaspoon", uofOptional.get().getDescription());
@@ -35,7 +33,7 @@ public class RecipeRepositoryIT {
 
     @Test
     @DirtiesContext
-    public void findByDescriptionCup() throws Exception{
+    public void findByDescriptionCup() {
         Optional<UnitOfMeasure> uofOptional = unitOfMeasureReposirory.findByDescription("Cup");
 
         assertEquals("Cup", uofOptional.get().getDescription());

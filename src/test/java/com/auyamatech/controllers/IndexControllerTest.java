@@ -37,6 +37,7 @@ public class IndexControllerTest {
     }
 
     @Test
+    // MockMVC. new capability to Mock a webServer,
     public void testMockMvc() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
@@ -47,23 +48,25 @@ public class IndexControllerTest {
 
     @Test
     public void getIndexPage() throws Exception {
+        //given
         Recipe recipe = new Recipe();
-        HashSet recipesData = new HashSet();
+        recipe.setId(1L);
+        HashSet<Recipe> recipesData = new HashSet<>();
         recipesData.add(recipe);
+        recipesData.add(new Recipe());
 
         when(recipeService.getRecipes()).thenReturn(recipesData);
 
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
+        //when
         String response = indexController.getIndexPage(model);
 
+        //then
         assertEquals("index", response);
-
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
         verify(recipeService, times(1)).getRecipes();
-
         Set<Recipe> setInController = argumentCaptor.getValue();
-
-        assertEquals(1, setInController.size());
+        assertEquals(2, setInController.size());
     }
 }
