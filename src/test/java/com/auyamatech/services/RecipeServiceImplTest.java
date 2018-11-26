@@ -1,5 +1,7 @@
 package com.auyamatech.services;
 
+import com.auyamatech.converters.RecipeCommandToRecipe;
+import com.auyamatech.converters.RecipeToRecipeCommand;
 import com.auyamatech.domain.Recipe;
 import com.auyamatech.repositories.RecipeRepository;
 import org.junit.Before;
@@ -12,20 +14,25 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
 
-    RecipeServiceImpl recipeService;
+    private RecipeServiceImpl recipeService;
+
     @Mock
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
+
+    @Mock
+    private RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    private RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
@@ -39,6 +46,7 @@ public class RecipeServiceImplTest {
 
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
+        verify(recipeRepository, never()).findById(anyLong());
     }
 
     @Test
@@ -51,7 +59,9 @@ public class RecipeServiceImplTest {
 
         Recipe returnRecipe = recipeService.getRecipeById(recipeId);
 
+        assertNotNull("Null recipe returned", returnRecipe);
         assertEquals(recipe, returnRecipe);
         verify(recipeRepository).findById(recipeId);
+        verify(recipeRepository, never()).findAll();
     }
 }
