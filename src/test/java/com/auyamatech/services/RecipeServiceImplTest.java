@@ -1,5 +1,6 @@
 package com.auyamatech.services;
 
+import com.auyamatech.commands.RecipeCommand;
 import com.auyamatech.converters.RecipeCommandToRecipe;
 import com.auyamatech.converters.RecipeToRecipeCommand;
 import com.auyamatech.domain.Recipe;
@@ -50,18 +51,38 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipeById() {
+    public void testFindById() {
         Recipe recipe = new Recipe();
-        long recipeId = 1L;
+        Long recipeId = 1L;
         recipe.setId(recipeId);
 
         when(recipeRepository.findById(recipe.getId())).thenReturn(Optional.of(recipe));
 
-        Recipe returnRecipe = recipeService.getRecipeById(recipeId);
+        Recipe returnRecipe = recipeService.findById(recipeId);
 
         assertNotNull("Null recipe returned", returnRecipe);
         assertEquals(recipe, returnRecipe);
         verify(recipeRepository).findById(recipeId);
+        verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    public void testFindCommandById() {
+        Recipe recipe = new Recipe();
+        Long recipeId = 1L;
+        recipe.setId(recipeId);
+
+        when(recipeRepository.findById(recipe.getId())).thenReturn(Optional.of(recipe));
+
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(recipeId);
+
+        when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
+
+        RecipeCommand command = recipeService.findCommandById(recipeId);
+
+        assertNotNull("Null recipe returned", command);
+        verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
     }
 }
