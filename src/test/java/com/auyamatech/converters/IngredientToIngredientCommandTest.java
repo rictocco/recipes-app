@@ -42,6 +42,7 @@ public class IngredientToIngredientCommandTest {
     @Test
     public void testConvertNullUOM() throws Exception {
         //given
+        RECIPE.setId(ID_VALUE);
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
         ingredient.setRecipe(RECIPE);
@@ -53,14 +54,15 @@ public class IngredientToIngredientCommandTest {
         //then
         assertNull(ingredientCommand.getUom());
         assertEquals(ID_VALUE, ingredientCommand.getId());
-        // assertEquals(RECIPE, ingredientCommand.get);
         assertEquals(AMOUNT, ingredientCommand.getAmount());
         assertEquals(DESCRIPTION, ingredientCommand.getDescription());
+        assertEquals(ID_VALUE, ingredientCommand.getRecipeId());
     }
 
     @Test
     public void convert() {
         //given
+        RECIPE.setId(ID_VALUE);
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
         ingredient.setAmount(AMOUNT);
@@ -68,6 +70,7 @@ public class IngredientToIngredientCommandTest {
         UnitOfMeasure uomCommand = new UnitOfMeasure();
         uomCommand.setId(UOM_ID);
         ingredient.setUom(uomCommand);
+        ingredient.setRecipe(RECIPE);
 
         //when
         IngredientCommand command = converter.convert(ingredient);
@@ -79,5 +82,6 @@ public class IngredientToIngredientCommandTest {
         assertEquals(DESCRIPTION, command.getDescription());
         assertEquals(AMOUNT, command.getAmount());
         assertEquals(UOM_ID, command.getUom().getId());
+        assertEquals(ID_VALUE, command.getRecipeId());
     }
 }
