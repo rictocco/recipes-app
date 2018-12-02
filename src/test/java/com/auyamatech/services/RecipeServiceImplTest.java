@@ -87,7 +87,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void testDeleteById() {
+    public void testDeleteIngredient() {
         //given
         Long id = Long.valueOf(2L);
 
