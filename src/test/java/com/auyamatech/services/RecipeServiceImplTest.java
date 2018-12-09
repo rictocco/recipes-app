@@ -4,6 +4,7 @@ import com.auyamatech.commands.RecipeCommand;
 import com.auyamatech.converters.RecipeCommandToRecipe;
 import com.auyamatech.converters.RecipeToRecipeCommand;
 import com.auyamatech.domain.Recipe;
+import com.auyamatech.exceptions.NotFoundException;
 import com.auyamatech.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void getRecipes() {
+    public void getRecipesTest() {
         Recipe recipe = new Recipe();
         HashSet recipesData = new HashSet();
         recipesData.add(recipe);
@@ -51,7 +52,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void testFindById() {
+    public void getRecipeByIdTest() {
         Recipe recipe = new Recipe();
         Long recipeId = 1L;
         recipe.setId(recipeId);
@@ -66,8 +67,17 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, never()).findAll();
     }
 
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() {
+        Optional<Recipe> recipeOptional = Optional.empty();
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipe = recipeService.findById(1L);
+    }
+
     @Test
-    public void testFindCommandById() {
+    public void getRecipeCommandByIdTest() {
         Recipe recipe = new Recipe();
         Long recipeId = 1L;
         recipe.setId(recipeId);
@@ -87,7 +97,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void testDeleteIngredient() {
+    public void deleteByIdTest() {
         //given
         Long id = Long.valueOf(2L);
 

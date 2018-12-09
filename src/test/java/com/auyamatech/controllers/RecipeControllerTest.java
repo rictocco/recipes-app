@@ -2,6 +2,7 @@ package com.auyamatech.controllers;
 
 import com.auyamatech.commands.RecipeCommand;
 import com.auyamatech.domain.Recipe;
+import com.auyamatech.exceptions.NotFoundException;
 import com.auyamatech.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -50,6 +51,18 @@ public class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect((view().name("recipe/show")))
                 .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeService.findById(1L)).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 
     @Test
