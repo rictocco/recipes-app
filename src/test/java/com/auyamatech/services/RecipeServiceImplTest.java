@@ -76,6 +76,11 @@ public class RecipeServiceImplTest {
         Recipe recipe = recipeService.findById(1L);
     }
 
+//    @Test
+//    public void getRecipeByIdWrongNumberFormat() {
+//        Recipe recipe = recipeService.findById("asd");
+//    }
+
     @Test
     public void getRecipeCommandByIdTest() {
         Recipe recipe = new Recipe();
